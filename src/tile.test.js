@@ -1,8 +1,6 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import sinon from 'sinon'
-import ReactTestUtils from 'react-dom/test-utils';
-import TestRenderer from 'react-test-renderer';
 import Tile from './tile';
 
 test('renders a tile with an available position number', () => {
