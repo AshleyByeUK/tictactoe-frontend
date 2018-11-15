@@ -27,6 +27,16 @@ test('an empty 3x3 board displays available position numbers', () => {
     });
 });
 
+test('a 3x3 board with displays a token or available position numbers', () => {
+  const tiles = ['X', 'O', 'X', 'O', 'X', 'O', 'X', 8, 9];
+  const board = mount(<Board tiles={tiles} />);
+  const allTiles = board.find('.tile');
+  allTiles.forEach(
+    (t, index) => {
+      expect(t.text()).toBe((tiles[index]).toString());
+    });
+});
+
 test('an empty tile returns its position when clicked', () => {
   const onClickFunction = sinon.spy();
   const tiles = [1, 2, 3, 4, 5, 6, 7, 8, 9];

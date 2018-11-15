@@ -33,7 +33,7 @@ test('returns its token when clicked', () => {
   const onClickFunction = sinon.spy();
   const tile = mount(
     <Tile
-      position={position}
+      position={0}
       onClick={onClickFunction(token)}
     />
   );

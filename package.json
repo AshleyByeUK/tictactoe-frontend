@@ -32,7 +32,8 @@
     "babel-jest": "^23.6.0",
     "enzyme": "^3.7.0",
     "enzyme-adapter-react-16": "^1.7.0",
-    "regenerator-runtime": "^0.12.1"
+    "regenerator-runtime": "^0.12.1",
+    "sinon": "^7.1.1"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>src/setupTests.js",
