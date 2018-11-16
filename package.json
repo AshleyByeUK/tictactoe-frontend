@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
     "create-react-app": "^2.1.1",
     "global": "^4.3.2",
     "react": "^16.6.3",

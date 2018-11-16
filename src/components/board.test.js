@@ -40,7 +40,7 @@ test('a 3x3 board with displays a token or available position numbers', () => {
 test('an empty tile returns its position when clicked', () => {
   const onClickFunction = sinon.spy();
   const tiles = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-  const board = mount(<Board tiles={tiles} onClick={onClickFunction(0)} />);
+  const board = mount(<Board tiles={tiles} onClick={() => onClickFunction(0)} />);
   const tile = board.find('.tile').first().simulate('click');
   expect(onClickFunction.calledWith(0)).toBe(true);
 });

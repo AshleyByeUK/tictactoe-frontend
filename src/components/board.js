@@ -4,7 +4,10 @@ import Tile from './tile'
 export default class Board extends React.Component {
   renderTile(position) {
     return (
-      <Tile position={this.props.tiles[position]} />
+      <Tile
+        position={this.props.tiles[position]}
+        onClick={() => this.props.onClick(position)}
+      />
     )
   }
 
