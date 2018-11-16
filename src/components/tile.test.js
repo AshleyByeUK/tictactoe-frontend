@@ -3,6 +3,8 @@ import { mount, shallow } from 'enzyme';
 import sinon from 'sinon'
 import Tile from './tile';
 
+const CLICK = 'click';
+
 test('renders a tile with an available position number', () => {
   const tile = shallow(<Tile position={1} />);
   const tileText = tile.getElement().props.children;
@@ -24,7 +26,7 @@ test('returns its position when clicked', () => {
       onClick={onClickFunction(position)}
     />
   );
-  tile.simulate('click');
+  tile.simulate(CLICK);
   expect(onClickFunction.calledWith(position)).toBe(true);
 });
 
@@ -37,6 +39,6 @@ test('returns its token when clicked', () => {
       onClick={onClickFunction(token)}
     />
   );
-  tile.simulate('click');
+  tile.simulate(CLICK);
   expect(onClickFunction.calledWith(token)).toBe(true);
 });

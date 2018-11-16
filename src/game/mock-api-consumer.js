@@ -1,13 +1,16 @@
 import Game from "./game";
 import Player from "./player";
+import GameState from "./game-state";
 
 export default class MockApiConsumer {
   #makeNewGameCalled = false;
   #timesPlayTurnCalled = 0;
-  #numberOfMovesToBePlayed;
+  #numberOfMovesToBeTested;
+  #gameResultAfterFinalMove;
 
-  constructor(numberOfMovesToBePlayed) {
-    this.#numberOfMovesToBePlayed = numberOfMovesToBePlayed;
+  constructor(numberOfMovesToBeTested, gameResultAfterFinalMove) {
+    this.#numberOfMovesToBeTested = numberOfMovesToBeTested;
+    this.#gameResultAfterFinalMove = gameResultAfterFinalMove;
   }
 
   makeNewGame(gameOptions) {
@@ -18,9 +21,12 @@ export default class MockApiConsumer {
   _buildGame(options) {
     const playerOne = new Player(options.getPlayerOneType(), options.getPlayerOneToken(), options.getPlayerOneName());
     const playerTwo = new Player(options.getPlayerTwoType(), options.getPlayerTwoToken(), options.getPlayerTwoName());
-    const board = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    const playing = true;
-    return new Game(playerOne, playerTwo, board, playing);
+    const gameState = new GameState();
+    gameState.setCurrentPlayer(playerOne);
+    gameState.setOtherPlayer(playerTwo);
+    gameState.setBoard([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    gameState.setState('playing');
+    return new Game(gameState);
   }
 
   makeNewGameWasCalled() {
@@ -29,11 +35,27 @@ export default class MockApiConsumer {
 
   playTurn(game, move) {
     this.#timesPlayTurnCalled++;
+    const gameState = new GameState();
+    gameState.setCurrentPlayer(game.getOtherPlayer());
+    gameState.setOtherPlayer(game.getCurrentPlayer());
+    gameState.setBoard(this._newBoardForMove(game, move));
+    gameState.setState(this._computeNextState());
+    gameState.setResult(this.#gameResultAfterFinalMove);
+    gameState.setWinner(game.getCurrentPlayer().getName());
+    return new Game(gameState);
+  }
+
+  _newBoardForMove(game, move) {
     const player = game.getCurrentPlayer();
-    let board = game.getBoard();
+    const board = game.getBoard().slice();
     board[move] = player.getToken();
-    const playing = this.#timesPlayTurnCalled < this.#numberOfMovesToBePlayed;
-    return new Game(game.getOtherPlayer(), game.getCurrentPlayer(), board, playing);
+    return board;
+  }
+
+  _computeNextState() {
+    return this.#timesPlayTurnCalled >= this.#numberOfMovesToBeTested ?
+      this.#gameResultAfterFinalMove :
+      'playing';
   }
 
   playTurnWasCalled(numberOfTimes) {

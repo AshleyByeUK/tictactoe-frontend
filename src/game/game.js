@@ -1,29 +1,31 @@
 export default class Game {
-  #currentPlayer;
-  #otherPlayer;
-  #board;
-  #gameOver;
+  #gameState;
 
-  constructor(firstPlayer, secondPlayer, board, playing) {
-    this.#currentPlayer = firstPlayer;
-    this.#otherPlayer = secondPlayer;
-    this.#board = board;
-    this.#gameOver = !playing;
+  constructor(gameState) {
+    this.#gameState = gameState;
   }
 
   getBoard() {
-    return this.#board;
+    return this.#gameState.getBoard();
   }
 
   getCurrentPlayer() {
-    return this.#currentPlayer;
+    return this.#gameState.getCurrentPlayer();
   }
 
   getOtherPlayer() {
-    return this.#otherPlayer;
+    return this.#gameState.getOtherPlayer();
   }
 
   isOver() {
-    return this.#gameOver;
+    return this.#gameState.getState() !== 'playing';
+  }
+
+  isWon() {
+    return this.isOver() && this.#gameState.getResult() === 'win';
+  }
+
+  getWinner() {
+    return this.#gameState.getWinner();
   }
 }
