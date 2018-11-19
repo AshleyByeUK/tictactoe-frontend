@@ -6,6 +6,7 @@ import Game from './game';
 const CLICK = 'click';
 const DRAW = 'draw';
 const GAME_TILE = '.game-tile';
+const GAME_RESULT = '.game-result';
 const GAME_STATUS = '.game-status';
 const LAST_MOVE = '.game-last-move';
 const NEW_GAME_BUTTON = '.game-new-game';
@@ -22,7 +23,7 @@ function startNewgame(numberOfTurnsToBeTested, gameStateAfterFinalTurn) {
     />);
 
   expect(game.state().tiles.length).toEqual(0);
-  game.find(NEW_GAME_BUTTON).simulate(CLICK);
+  game.find(NEW_GAME_BUTTON).at(0).simulate(CLICK);
   game.update();
   return game;
 }
@@ -59,11 +60,15 @@ function expectNumberOfTimesPlayTurnWasCalledToBe(numberOfTimes) {
 }
 
 function expectLastMoveTextToBe(text, game) {
-  expect(game.find(LAST_MOVE).text()).toEqual(text);
+  expect(game.find(LAST_MOVE).at(0).text()).toEqual(text);
 }
 
 function expectGameStatusTextToBe(text, game) {
-  expect(game.find(GAME_STATUS).text()).toBe(text);
+  expect(game.find(GAME_STATUS).at(0).text()).toBe(text);
+}
+
+function expectGameResultTextToBe(text, game) {
+  expect(game.find(GAME_RESULT).at(0).text()).toBe(text);
 }
 
 test('can make a new 3x3 game', (done) => {
@@ -160,7 +165,7 @@ test('does not allow moves to be made once the game is drawn', (done) => {
 
   const assertions = function() {
     expectNumberOfTimesPlayTurnWasCalledToBe(numberOfTurnsUntilDraw);
-    expectGameStatusTextToBe('Game over! It\'s a draw', game);
+    expectGameResultTextToBe('Game over! It\'s a draw', game);
     done();
   };
 
@@ -176,7 +181,7 @@ test('does not allow moves to be made once player one has won', (done) => {
 
   const assertions = function() {
     expectNumberOfTimesPlayTurnWasCalledToBe(numberOfTurnsUntilWin);
-    expectGameStatusTextToBe('Game over! Player 1 won', game);
+    expectGameResultTextToBe('Game over! Player 1 won', game);
     done();
   };
 
@@ -192,7 +197,7 @@ test('does not allow moves to be made once player two has won', (done) => {
 
   const assertions = function() {
     expectNumberOfTimesPlayTurnWasCalledToBe(numberOfTurnsUntilWin);
-    expectGameStatusTextToBe('Game over! Player 2 won', game);
+    expectGameResultTextToBe('Game over! Player 2 won', game);
     done();
   };
 

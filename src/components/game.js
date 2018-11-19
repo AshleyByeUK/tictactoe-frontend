@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button, Container, Content, Level, Section, SubTitle, Title } from 'reactbulma';
 import GameOptions from '../game/game-options';
 import Board from "./board";
 import GameState from '../game/game-state';
@@ -72,15 +73,23 @@ export default class Game extends React.Component {
 
   status() {
     if (this.state.isOver) {
-      return 'Game over! ' + (this.state.isWon ? this.state.winner + ' won' : 'It\'s a draw');
+      return <p>&nbsp;</p>;
     } else {
       return 'Next player: ' + (this.state.currentPlayer === 1 ? this.state.playerOne.getName() : this.state.playerTwo.getName());
     }
   }
 
+  result() {
+    if (this.state.isOver) {
+      return <p>Game over! {this.state.isWon ? this.state.winner + ' won' : 'It\'s a draw'}</p>;
+    } else {
+      return <p>Playing...</p>;
+    }
+  }
+
   lastMove() {
     if (this.state.lastPosition === '') {
-      return '';
+      return <p>&nbsp;</p>;
     } else {
       return (this.state.currentPlayer === 1 ? this.state.playerTwo.getName() : this.state.playerOne.getName()) + ' played in position ' + this.state.lastPosition;
     }
@@ -89,34 +98,51 @@ export default class Game extends React.Component {
   render() {
     const status = this.state.inProgress ? this.status() : '';
     const lastMove = this.state.inProgress ? this.lastMove() : '';
+    const result = this.state.inProgress ? this.result() : '';
     const gameElements = this.state.inProgress ?
-      <div className="game">
-        <div className="game-header">
-          <div className="game-status">{status}</div>
-        </div>
-        <div className="game-board">
-          <Board
-            tiles={this.state.tiles}
-            onClick={(position) => this.handleSelectTile(position)}
-          />
-        </div>
-        <div className="game-footer">
-          <div className="game-last-move">{lastMove}</div>
-        </div>
-      </div>:
-      <div className="game"></div>;
+      <Container>
+        <Content>
+          <Level>
+            <Level.Item>
+              <Title className="game-result">{result}</Title>
+            </Level.Item>
+          </Level>
+          <Level>
+            <Level.Item>
+              <SubTitle className="game-status">{status}</SubTitle>
+            </Level.Item>
+          </Level>
+          <Level>
+            <Level.Item>
+              <SubTitle className="game-last-move">{lastMove}</SubTitle>
+            </Level.Item>
+          </Level>
+          <Level>
+            <Level.Item>
+              <Board className="game-board"
+                tiles={this.state.tiles}
+                onClick={(position) => this.handleSelectTile(position)}
+              />
+            </Level.Item>
+          </Level>
+        </Content>
+      </Container>:
+      <Container></Container>;
     return (
-      <div className="game-container">
-        <div className="game-menu">
-          <button
-            className="game-new-game"
-            onClick={() => this.handleStartNewGame()}
-          >
-            Play a game
-          </button>
-        </div>
+      <Section>
+        <Container>
+          <Level>
+            <Level.Item>
+              <Button primary
+                className="game-new-game"
+                onClick={() => this.handleStartNewGame()}>
+                Play a game
+              </Button>
+            </Level.Item>
+          </Level>
+        </Container>,
         {gameElements}
-      </div>
+      </Section>
     );
   }
 }
