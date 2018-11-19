@@ -1,25 +1,34 @@
 export default class GameState {
+  #playerOne
+  #playerTwo
   #currentPlayer;
-  #otherPlayer;
   #board;
   #state;
   #result;
   #winner;
 
+  getPlayerOne() {
+    return this.#playerOne;
+  }
+
+  setPlayerOne(player) {
+    this.#playerOne = player;
+  }
+
+  getPlayerTwo() {
+    return this.#playerTwo;
+  }
+
+  setPlayerTwo(player) {
+    this.#playerTwo = player;
+  }
+
   getCurrentPlayer() {
     return this.#currentPlayer;
   }
 
-  setCurrentPlayer(player) {
-    this.#currentPlayer = player;
-  }
-
-  getOtherPlayer() {
-    return this.#otherPlayer;
-  }
-
-  setOtherPlayer(player) {
-    this.#otherPlayer = player;
+  setCurrentPlayer(number) {
+    this.#currentPlayer = number;
   }
 
   getBoard() {

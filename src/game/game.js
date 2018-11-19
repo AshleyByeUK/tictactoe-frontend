@@ -5,16 +5,24 @@ export default class Game {
     this.#gameState = gameState;
   }
 
-  getBoard() {
-    return this.#gameState.getBoard();
+  getPlayerOne() {
+    return this.#gameState.getPlayerOne();
+  }
+
+  getPlayerTwo() {
+    return this.#gameState.getPlayerTwo();
   }
 
   getCurrentPlayer() {
     return this.#gameState.getCurrentPlayer();
   }
 
-  getOtherPlayer() {
-    return this.#gameState.getOtherPlayer();
+  getBoard() {
+    return this.#gameState.getBoard();
+  }
+
+  getState() {
+    return this.#gameState.getState();
   }
 
   isOver() {

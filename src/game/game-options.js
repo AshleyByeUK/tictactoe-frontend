@@ -55,7 +55,7 @@ export default class GameOptions {
     this.#playerTwoName = name;
   }
 
-  getBoardSie() {
+  getBoardSize() {
     return this.#boardSize();
   }
 

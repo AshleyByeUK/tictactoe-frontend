@@ -15,15 +15,19 @@ export default class MockApiConsumer {
 
   makeNewGame(gameOptions) {
     this.#makeNewGameCalled = true;
-    return this._buildGame(gameOptions);
+    const game = this._buildGame(gameOptions);
+    return new Promise(function(resolve, reject) {
+      resolve(game)
+    });
   }
 
   _buildGame(options) {
     const playerOne = new Player(options.getPlayerOneType(), options.getPlayerOneToken(), options.getPlayerOneName());
     const playerTwo = new Player(options.getPlayerTwoType(), options.getPlayerTwoToken(), options.getPlayerTwoName());
     const gameState = new GameState();
-    gameState.setCurrentPlayer(playerOne);
-    gameState.setOtherPlayer(playerTwo);
+    gameState.setCurrentPlayer(1);
+    gameState.setPlayerOne(playerOne);
+    gameState.setPlayerTwo(playerTwo);
     gameState.setBoard([1, 2, 3, 4, 5, 6, 7, 8, 9]);
     gameState.setState('playing');
     return new Game(gameState);
@@ -33,21 +37,34 @@ export default class MockApiConsumer {
     return this.#makeNewGameCalled;
   }
 
-  playTurn(game, move) {
+  playTurn(gameState, move) {
     this.#timesPlayTurnCalled++;
-    const gameState = new GameState();
-    gameState.setCurrentPlayer(game.getOtherPlayer());
-    gameState.setOtherPlayer(game.getCurrentPlayer());
-    gameState.setBoard(this._newBoardForMove(game, move));
-    gameState.setState(this._computeNextState());
-    gameState.setResult(this.#gameResultAfterFinalMove);
-    gameState.setWinner(game.getCurrentPlayer().getName());
-    return new Game(gameState);
+    const newGameState = this._generateNewGameState(gameState, move);
+    const game = new Game(newGameState);
+    return new Promise(function(resolve, reject) {
+      resolve(game);
+    });
   }
 
-  _newBoardForMove(game, move) {
-    const player = game.getCurrentPlayer();
-    const board = game.getBoard().slice();
+  _generateNewGameState(gameState, move) {
+    const newGameState = new GameState();
+    newGameState.setPlayerOne(gameState.getPlayerOne());
+    newGameState.setPlayerTwo(gameState.getPlayerTwo());
+    newGameState.setCurrentPlayer(this._computeNextPlayer(gameState));
+    newGameState.setBoard(this._newBoardForMove(gameState, move));
+    newGameState.setState(this._computeNextState());
+    newGameState.setResult(this.#gameResultAfterFinalMove);
+    newGameState.setWinner(this._computeWinner(gameState));
+    return newGameState;
+  }
+
+  _computeNextPlayer(gameState) {
+    return gameState.getCurrentPlayer() === 1 ? 2 : 1;
+  }
+
+  _newBoardForMove(gameState, move) {
+    const player = gameState.getCurrentPlayer() === 1 ? gameState.getPlayerOne() : gameState.getPlayerTwo();
+    const board = gameState.getBoard().slice();
     board[move] = player.getToken();
     return board;
   }
@@ -56,6 +73,10 @@ export default class MockApiConsumer {
     return this.#timesPlayTurnCalled >= this.#numberOfMovesToBeTested ?
       this.#gameResultAfterFinalMove :
       'playing';
+  }
+
+  _computeWinner(gameState) {
+    return gameState.getCurrentPlayer() === 1 ? gameState.getPlayerOne().getName() : gameState.getPlayerTwo().getName();
   }
 
   playTurnWasCalled(numberOfTimes) {

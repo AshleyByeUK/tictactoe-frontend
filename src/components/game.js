@@ -1,60 +1,101 @@
 import React from 'react';
 import GameOptions from '../game/game-options';
 import Board from "./board";
+import GameState from '../game/game-state';
 
 export default class Game extends React.Component {
-  #game;
-
   constructor(props) {
     super(props);
     this.state = {
-      lastPosition: null,
+      inProgress: false,
+      currentPlayer: null,
+      playerOne: null,
+      playerTwo: null,
       tiles: [],
+      gameState: null,
+      lastPosition: '',
+      isOver: false,
+      isWon: false,
+      winner: '',
     };
   }
 
-  handleStartNewGame() {
+   handleStartNewGame() {
     const options = new GameOptions();
-    this.#game = this.props.onNewGame(options);
-    this.setState({
-      lastPosition: null,
-      tiles: this.#game.getBoard(),
-    });
+    this.props.onNewGame(options)
+      .then(game => {this.setState({
+        inProgress: true,
+        currentPlayer: game.getCurrentPlayer(),
+        playerOne: game.getPlayerOne(),
+        playerTwo: game.getPlayerTwo(),
+        tiles: game.getBoard(),
+        gameState: game.getState(),
+        lastPosition: '',
+        isOver: false,
+        isWon: false,
+        winner: '',
+      })})
+      .catch(err => console.log(err));
   }
 
   handleSelectTile(position) {
     const tile = this.state.tiles[position];
-    if (this.#game.isOver() || !Number.isInteger(tile)) {
+    if (this.state.isOver || !Number.isInteger(tile)) {
       return;
     }
-    this.#game = this.props.onPlayTurn(this.#game, position);
-    this.setState({
-      lastPosition: position + 1,
-      tiles: this.#game.getBoard(),
-    });
+    const gameState = new GameState();
+    gameState.setCurrentPlayer(this.state.currentPlayer);
+    gameState.setPlayerOne(this.state.playerOne);
+    gameState.setPlayerTwo(this.state.playerTwo);
+    gameState.setBoard(this.state.tiles);
+    gameState.setState(this.state.gameState);
+    // const game = this.props.onPlayTurn(gameState, position);
+    // this.setState({
+    //   inProgress: true,
+    //   currentPlayer: game.getCurrentPlayer(),
+    //   otherPlayer: game.getOtherPlayer(),
+    //   tiles: game.getBoard(),
+    //   lastPosition: position + 1,
+    //   isOver: game.isOver(),
+    //   isWon: game.isWon(),
+    //   winner: game.getWinner(),
+    // });
+    this.props.onPlayTurn(gameState, position)
+      .then(game => {this.setState({
+        inProgress: true,
+        currentPlayer: game.getCurrentPlayer(),
+        playerOne: game.getPlayerOne(),
+        playerTwo: game.getPlayerTwo(),
+        tiles: game.getBoard(),
+        gameState: game.getState(),
+        lastPosition: position + 1,
+        isOver: game.isOver(),
+        isWon: game.isWon(),
+        winner: game.getWinner(),
+      })})
+      .catch(err => console.log(err));
   }
 
-  status(game) {
-    if (game.isOver()) {
-      return 'Game over! ' + (game.isWon() ? game.getWinner() + ' won' : 'It\'s a draw');
+  status() {
+    if (this.state.isOver) {
+      return 'Game over! ' + (this.state.isWon ? this.state.winner + ' won' : 'It\'s a draw');
     } else {
-      return 'Next player: ' + game.getCurrentPlayer().getName();
+      return 'Next player: ' + (this.state.currentPlayer === 1 ? this.state.playerOne.getName() : this.state.playerTwo.getName());
     }
   }
 
-  lastMove(game) {
-    if (this.state.lastPosition == null) {
+  lastMove() {
+    if (this.state.lastPosition === '') {
       return '';
     } else {
-      return game.getOtherPlayer().getName() + ' played in position ' + this.state.lastPosition;
+      return (this.state.currentPlayer === 1 ? this.state.playerTwo.getName() : this.state.playerOne.getName()) + ' played in position ' + this.state.lastPosition;
     }
   }
 
   render() {
-    const status = this.#game == null ? '' : this.status(this.#game);
-    const lastMove = this.#game == null? '' : this.lastMove(this.#game);
-    const gameElements = this.#game == null ?
-      <div className="game-board hidden"></div> :
+    const status = this.state.inProgress ? this.status() : '';
+    const lastMove = this.state.inProgress ? this.lastMove() : '';
+    const gameElements = this.state.inProgress ?
       <div className="game">
         <div className="game-header">
           <div className="game-status">{status}</div>
@@ -68,7 +109,8 @@ export default class Game extends React.Component {
         <div className="game-footer">
           <div className="game-last-move">{lastMove}</div>
         </div>
-      </div>;
+      </div>:
+      <div className="game"></div>;
     return (
       <div className="game-container">
         <div className="game-menu">
