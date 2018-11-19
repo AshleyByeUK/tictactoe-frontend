@@ -3,7 +3,7 @@ import Game from './game';
 import GameState from './game-state';
 import Player from './player';
 
-export default class ApiConsumer {
+export default class GameService {
   #apiUrl;
   #newGameUrl = '/game/new';
   #playTurnUrl = '/game/play';

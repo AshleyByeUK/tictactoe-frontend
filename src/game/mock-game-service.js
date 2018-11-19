@@ -2,7 +2,7 @@ import Game from "./game";
 import Player from "./player";
 import GameState from "./game-state";
 
-export default class MockApiConsumer {
+export default class MockGameService {
   #makeNewGameCalled = false;
   #timesPlayTurnCalled = 0;
   #numberOfMovesToBeTested;

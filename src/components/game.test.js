@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import MockApiConsumer from '../game/mock-api-consumer';
+import MockGameService from '../game/mock-game-service';
 import Game from './game';
 
 const CLICK = 'click';
@@ -11,14 +11,14 @@ const LAST_MOVE = '.game-last-move';
 const NEW_GAME_BUTTON = '.game-new-game';
 const PLAYING = 'playing';
 const WIN = 'win';
-let apiConsumer;
+let gameService;
 
 function startNewgame(numberOfTurnsToBeTested, gameStateAfterFinalTurn) {
-  apiConsumer = new MockApiConsumer(numberOfTurnsToBeTested, gameStateAfterFinalTurn);
+  gameService = new MockGameService(numberOfTurnsToBeTested, gameStateAfterFinalTurn);
   const game = mount(
     <Game
-      onNewGame={(options) => apiConsumer.makeNewGame(options)}
-      onPlayTurn={(gameState, move) => apiConsumer.playTurn(gameState, move)}
+      onNewGame={(options) => gameService.makeNewGame(options)}
+      onPlayTurn={(gameState, move) => gameService.playTurn(gameState, move)}
     />);
 
   expect(game.state().tiles.length).toEqual(0);
@@ -55,7 +55,7 @@ function expectTileAtPositionToHaveText(position, text, game) {
 }
 
 function expectNumberOfTimesPlayTurnWasCalledToBe(numberOfTimes) {
-  expect(apiConsumer.playTurnWasCalled(numberOfTimes)).toBe(true);
+  expect(gameService.playTurnWasCalled(numberOfTimes)).toBe(true);
 }
 
 function expectLastMoveTextToBe(text, game) {
@@ -71,7 +71,7 @@ test('can make a new 3x3 game', (done) => {
 
   setImmediate(() => {
     game.update();
-    expect(apiConsumer.makeNewGameWasCalled()).toBe(true);
+    expect(gameService.makeNewGameWasCalled()).toBe(true);
     expectTileAtEachPositionToHaveText(
       {1: '1', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9'},
       game);

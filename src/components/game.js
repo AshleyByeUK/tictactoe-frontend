@@ -43,23 +43,7 @@ export default class Game extends React.Component {
     if (this.state.isOver || !Number.isInteger(tile)) {
       return;
     }
-    const gameState = new GameState();
-    gameState.setCurrentPlayer(this.state.currentPlayer);
-    gameState.setPlayerOne(this.state.playerOne);
-    gameState.setPlayerTwo(this.state.playerTwo);
-    gameState.setBoard(this.state.tiles);
-    gameState.setState(this.state.gameState);
-    // const game = this.props.onPlayTurn(gameState, position);
-    // this.setState({
-    //   inProgress: true,
-    //   currentPlayer: game.getCurrentPlayer(),
-    //   otherPlayer: game.getOtherPlayer(),
-    //   tiles: game.getBoard(),
-    //   lastPosition: position + 1,
-    //   isOver: game.isOver(),
-    //   isWon: game.isWon(),
-    //   winner: game.getWinner(),
-    // });
+    const gameState = this._getCurrentGameState();
     this.props.onPlayTurn(gameState, position)
       .then(game => {this.setState({
         inProgress: true,
@@ -74,6 +58,16 @@ export default class Game extends React.Component {
         winner: game.getWinner(),
       })})
       .catch(err => console.log(err));
+  }
+
+  _getCurrentGameState() {
+    const gameState = new GameState();
+    gameState.setCurrentPlayer(this.state.currentPlayer);
+    gameState.setPlayerOne(this.state.playerOne);
+    gameState.setPlayerTwo(this.state.playerTwo);
+    gameState.setBoard(this.state.tiles);
+    gameState.setState(this.state.gameState);
+    return gameState;
   }
 
   status() {
