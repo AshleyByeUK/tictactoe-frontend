@@ -3,7 +3,8 @@
 
 # TicTacToe Frontend
 
-A React frontend to a [game of TicTacToe](https://github.com/AshleyByeUK/tictactoe-ruby).
+A React frontend to a [game of TicTacToe](https://github.com/AshleyByeUK/tictactoe-ruby). You can also
+[play online](https://react-tictactoe-frontend.herokuapp.com/).
 
 ## Requirements
 
