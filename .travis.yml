@@ -8,7 +8,7 @@ install:
 - yarn install
 - yarn global add codecov
 script:
-- yarn test
+- yarn test --coverage
 - codecov
 deploy:
   provider: heroku
