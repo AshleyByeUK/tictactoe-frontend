@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/AshleyByeUK/tictactoe-frontend.svg?branch=master)](https://travis-ci.org/AshleyByeUK/tictactoe-frontend)
+[![codecov](https://codecov.io/gh/AshleyByeUK/tictactoe-frontend/branch/master/graph/badge.svg)](https://codecov.io/gh/AshleyByeUK/tictactoe-frontend)
+
 # TicTacToe Frontend
 
 A React frontend to a [game of TicTacToe](https://github.com/AshleyByeUK/tictactoe-ruby).
@@ -30,7 +33,7 @@ Start Node server:
 yarn start
 ```
 
-Open a browser at (http://localhost:3000)[http://localhost:3000] if it does not open automatically.
+Open a browser at [http://localhost:3000](http://localhost:3000) if it does not open automatically.
 
 ## Tests
 
