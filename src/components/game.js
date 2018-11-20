@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Container, Content, Level, Section, SubTitle, Title } from 'reactbulma';
 import GameOptions from '../game/game-options';
 import Board from "./board";
+import GamePart from './game-part';
 import GameState from '../game/game-state';
 
 export default class Game extends React.Component {
@@ -35,8 +36,7 @@ export default class Game extends React.Component {
         isOver: false,
         isWon: false,
         winner: '',
-      })})
-      .catch(err => console.log(err));
+      })});
   }
 
   handleSelectTile(position) {
@@ -57,8 +57,7 @@ export default class Game extends React.Component {
         isOver: game.isOver(),
         isWon: game.isWon(),
         winner: game.getWinner(),
-      })})
-      .catch(err => console.log(err));
+      })});
   }
 
   _getCurrentGameState() {
@@ -102,44 +101,34 @@ export default class Game extends React.Component {
     const gameElements = this.state.inProgress ?
       <Container>
         <Content>
-          <Level>
-            <Level.Item>
-              <Title className="game-result">{result}</Title>
-            </Level.Item>
-          </Level>
-          <Level>
-            <Level.Item>
-              <SubTitle className="game-status">{status}</SubTitle>
-            </Level.Item>
-          </Level>
-          <Level>
-            <Level.Item>
-              <SubTitle className="game-last-move">{lastMove}</SubTitle>
-            </Level.Item>
-          </Level>
-          <Level>
-            <Level.Item>
-              <Board className="game-board"
-                tiles={this.state.tiles}
-                onClick={(position) => this.handleSelectTile(position)}
-              />
-            </Level.Item>
-          </Level>
+          <GamePart render={() => (
+            <Title className="game-result">{result}</Title>
+          )} />
+          <GamePart render={() => (
+            <SubTitle className="game-status">{status}</SubTitle>
+          )} />
+          <GamePart render={() => (
+            <SubTitle className="game-last-move">{lastMove}</SubTitle>
+          )} />
+          <GamePart render={() => (
+            <Board className="game-board"
+              tiles={this.state.tiles}
+              onClick={(position) => this.handleSelectTile(position)}
+            />
+          )} />
         </Content>
       </Container>:
       <Container></Container>;
     return (
       <Section>
         <Container>
-          <Level>
-            <Level.Item>
-              <Button primary
-                className="game-new-game"
-                onClick={() => this.handleStartNewGame()}>
-                Play a game
-              </Button>
-            </Level.Item>
-          </Level>
+          <GamePart render={() => (
+            <Button primary
+              className="game-new-game"
+              onClick={() => this.handleStartNewGame()}>
+              Play a game
+            </Button>
+          )} />
         </Container>,
         {gameElements}
       </Section>

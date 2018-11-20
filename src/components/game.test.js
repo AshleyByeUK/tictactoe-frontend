@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import MockGameService from '../game/mock-game-service';
+import FakeGameService from '../__mocks__/fake-game-service';
 import Game from './game';
 
 const CLICK = 'click';
@@ -15,7 +15,7 @@ const WIN = 'win';
 let gameService;
 
 function startNewgame(numberOfTurnsToBeTested, gameStateAfterFinalTurn) {
-  gameService = new MockGameService(numberOfTurnsToBeTested, gameStateAfterFinalTurn);
+  gameService = new FakeGameService(numberOfTurnsToBeTested, gameStateAfterFinalTurn);
   const game = mount(
     <Game
       onNewGame={(options) => gameService.makeNewGame(options)}

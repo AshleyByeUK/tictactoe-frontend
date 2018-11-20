@@ -1,8 +1,8 @@
-import Game from "./game";
-import Player from "./player";
-import GameState from "./game-state";
+import Game from "../game/game";
+import Player from "../game/player";
+import GameState from "../game/game-state";
 
-export default class MockGameService {
+export default class FakeGameService {
   #makeNewGameCalled = false;
   #timesPlayTurnCalled = 0;
   #numberOfMovesToBeTested;
